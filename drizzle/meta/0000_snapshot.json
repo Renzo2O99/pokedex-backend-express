@@ -1,5 +1,5 @@
 {
-  "id": "1f84fd58-a589-408a-9037-7929398fdedf",
+  "id": "2145e88a-b71f-417b-a63c-b16292d75e77",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -305,7 +305,29 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "search_idx": {
+          "name": "search_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "search_term",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "search_history_user_id_users_id_fk": {
           "name": "search_history_user_id_users_id_fk",

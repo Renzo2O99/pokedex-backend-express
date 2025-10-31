@@ -1,5 +1,5 @@
 // backend-express/src/core/db/schema.ts
-import { pgTable, serial, varchar, text, integer, timestamp, primaryKey } from "drizzle-orm/pg-core";
+import { pgTable, serial, varchar, text, integer, timestamp, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
 
 //? --- Feature: Autenticación ---
 export const users = pgTable("users", {
@@ -26,7 +26,10 @@ export const searchHistory = pgTable("search_history", {
   "userId": integer("user_id").notNull().references(() => users.id, { "onDelete": "cascade" }),
   "searchTerm": varchar("search_term", { "length": 256 }).notNull(),
   "createdAt": timestamp("created_at").defaultNow().notNull(),
-});
+}, (table) => ({
+  // Esto asegura que la combinación de un usuario y un término de búsqueda sea única.
+  searchIndex: uniqueIndex("search_idx").on(table.userId, table.searchTerm),
+}));
 
 //? --- Feature: Comentarios y Valoraciones ---
 export const comments = pgTable("comments", {

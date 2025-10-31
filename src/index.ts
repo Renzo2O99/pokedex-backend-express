@@ -1,4 +1,3 @@
-// backend-express/src/index.ts
 import "dotenv/config";
 import "./core/config/env";
 import express, { NextFunction, Request, Response } from "express";
@@ -7,11 +6,13 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./core/config/swagger.config";
 import { authRoutes } from "./features/auth/auth.routes";
 import { favoritesRoutes } from "./features/favorites/favorites.routes";
+import { historyRoutes } from "./features/search-history/search-history.routes";
 import { logger } from "./core/utils/logger";
 import chalk from "chalk";
 
 import { requestLogger } from "./core/middlewares/request-logger";
 import { errorHandler } from "./core/middlewares/error.middleware";
+import { ENVIRONMENT_MESSAGES } from "./core/constants";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -32,6 +33,7 @@ app.get("/api", (req: Request, res: Response) => {
 });
 app.use("/api/auth", authRoutes);
 app.use("/api/favorites", favoritesRoutes);
+app.use("/api/search-history", historyRoutes);
 
 // --- Ruta para Documentación Swagger ---
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -46,5 +48,10 @@ app.use(errorHandler);
 
 //? --- Iniciar Servidor ---
 app.listen(port, () => {
+  if (process.env.NODE_ENV === "production") {
+    logger.info(ENVIRONMENT_MESSAGES.PRODUCTION);
+  } else {
+    logger.info(ENVIRONMENT_MESSAGES.DEVELOPMENT);
+  }
   logger.success(`\nBackend Express escuchando en el puerto ${port} 🚀\n`);
 });

@@ -23,7 +23,7 @@ if (!JWT_SECRET) {
 /**
  * @function authMiddleware
  * @description Middleware para autenticar usuarios a través de un JSON Web Token (JWT).
- * Busca el token en la cabecera 'Authorization' (formato "Bearer <token>").
+ * Busca el token en la cabecera "Authorization" (formato "Bearer <token>").
  * Verifica la validez del token usando el `JWT_SECRET`.
  * Si es válido, decodifica el payload y lo adjunta a `req.user`.
  * Si es inválido o falta, lanza un `UnauthorizedError`.

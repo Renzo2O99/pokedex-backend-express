@@ -22,7 +22,7 @@ export const handleInputErrors = (req: Request, res: Response, next: NextFunctio
 
   if (!errors.isEmpty()) {
     const formattedErrors = errors.array().reduce((acc, error) => {
-      if (error.type === 'field') {
+      if (error.type === "field") {
         if (!acc[error.path]) {
           acc[error.path] = [];
         }

@@ -17,20 +17,33 @@ export const AUTH_TOKEN_PREFIX: string = "Bearer ";
 
 /**
  * @constant ERROR_MESSAGES
- * @description Colección de mensajes de error estandarizados.
- * @property {string} USERNAME_IN_USE - Mensaje para username duplicado.
+ * @description Colección de mensajes de error estandarizados para toda la aplicación.
+ * @property {string} USERNAME_IN_USE - Mensaje para nombre de usuario duplicado.
  * @property {string} EMAIL_IN_USE - Mensaje para email duplicado.
- * @property {string} INVALID_CREDENTIALS - Mensaje para login fallido.
+ * @property {string} INVALID_CREDENTIALS - Mensaje para credenciales de inicio de sesión incorrectas.
+ * @property {string} USER_NOT_FOUND - Mensaje cuando un usuario no se encuentra en la base de datos.
+ * @property {string} PASSWORD_INCORRECT - Mensaje para contraseña incorrecta.
+ * @property {string} TOKEN_REQUIRED - Mensaje cuando el token de autenticación no se proporciona.
+ * @property {string} TOKEN_INVALID_FORMAT - Mensaje para un formato de token incorrecto.
+ * @property {string} TOKEN_INVALID_OR_EXPIRED - Mensaje para un token que es inválido o ha expirado.
+ * @property {string} VALIDATION_USERNAME_REQUIRED - Mensaje de validación para nombre de usuario requerido.
+ * @property {string} VALIDATION_USERNAME_MIN_LENGTH - Mensaje de validación para la longitud mínima del nombre de usuario.
+ * @property {string} VALIDATION_EMAIL_INVALID - Mensaje de validación para un formato de email inválido.
+ * @property {string} VALIDATION_PASSWORD_MIN_LENGTH - Mensaje de validación para la longitud mínima de la contraseña.
+ * @property {string} VALIDATION_PASSWORD_REQUIRED - Mensaje de validación para contraseña requerida.
  * @property {string} INVALID_INPUT - Mensaje genérico para datos de entrada inválidos.
- * @property {string} USER_NOT_FOUND - Mensaje para usuario no encontrado.
- * @property {string} TOKEN_REQUIRED - Mensaje cuando falta el token JWT.
- * @property {string} TOKEN_INVALID_FORMAT - Mensaje para formato de token incorrecto.
- * @property {string} TOKEN_INVALID_OR_EXPIRED - Mensaje para token inválido o expirado.
- * @property {string} INTERNAL_SERVER_ERROR - Mensaje genérico para errores 500.
- * @property {string} RESOURCE_NOT_FOUND - Mensaje genérico para errores 404.
- * @property {string} CONFLICT - Mensaje genérico para errores 409.
- * @property {string} BAD_REQUEST - Mensaje genérico para errores 400.
- * @property {string} UNAUTHORIZED - Mensaje genérico para errores 401.
+ * @property {string} INTERNAL_SERVER_ERROR - Mensaje para errores internos del servidor (código 500).
+ * @property {string} RESOURCE_NOT_FOUND - Mensaje para recursos no encontrados (código 404).
+ * @property {string} CONFLICT - Mensaje para conflictos de recursos, como duplicados (código 409).
+ * @property {string} BAD_REQUEST - Mensaje para peticiones mal formadas (código 400).
+ * @property {string} UNAUTHORIZED - Mensaje para acceso no autorizado (código 401).
+ * @property {string} TOO_MANY_REQUESTS - Mensaje para limitar la tasa de solicitudes.
+ * @property {string} VALIDATION_POKEMON_ID_REQUIRED - Mensaje de validación para el ID de Pokémon requerido.
+ * @property {string} FAVORITE_ALREADY_EXISTS - Mensaje cuando un Pokémon ya existe en favoritos.
+ * @property {string} FAVORITE_NOT_FOUND - Mensaje cuando un Pokémon no se encuentra en favoritos.
+ * @property {string} VALIDATION_SEARCH_TERM_REQUIRED - Mensaje de validación para el término de búsqueda requerido.
+ * @property {string} HISTORY_ENTRY_NOT_FOUND - Mensaje cuando una entrada del historial no se encuentra.
+ * @property {string} HISTORY_FORBIDDEN - Mensaje cuando un usuario no tiene permiso para una acción en el historial.
  */
 export const ERROR_MESSAGES = {
   // Errores específicos de Auth
@@ -63,16 +76,41 @@ export const ERROR_MESSAGES = {
   VALIDATION_POKEMON_ID_REQUIRED: "El pokemonId es requerido y debe ser un número.",
   FAVORITE_ALREADY_EXISTS: "Este Pokémon ya está en tus favoritos.",
   FAVORITE_NOT_FOUND: "Este Pokémon no se encontró en tus favoritos.",
+  VALIDATION_SEARCH_TERM_REQUIRED: "El \"searchTerm\" es requerido y debe ser un string.",
+  HISTORY_ENTRY_NOT_FOUND: "Entrada de historial no encontrada.",
+  HISTORY_FORBIDDEN: "No tienes permiso para eliminar esta entrada.",
 };
 
 /**
  * @constant SUCCESS_MESSAGES
- * @description Colección de mensajes de éxito estandarizados.
+ * @description Colección de mensajes de éxito estandarizados para confirmar operaciones.
+ * @property {string} REGISTER_SUCCESS - Mensaje de confirmación para registro de usuario exitoso.
+ * @property {string} LOGIN_SUCCESS - Mensaje de confirmación para inicio de sesión exitoso.
+ * @property {string} FAVORITE_ADDED - Mensaje de confirmación al añadir un Pokémon a favoritos.
+ * @property {string} FAVORITE_REMOVED - Mensaje de confirmación al eliminar un Pokémon de favoritos.
+ * @property {string} FAVORITES_FETCHED - Mensaje al obtener la lista de Pokémon favoritos.
+ * @property {string} HISTORY_FETCHED - Mensaje al obtener el historial de búsqueda.
+ * @property {string} HISTORY_ENTRY_ADDED - Mensaje al guardar un nuevo término de búsqueda.
+ * @property {string} HISTORY_ENTRY_REMOVED - Mensaje al eliminar un término de búsqueda.
  */
 export const SUCCESS_MESSAGES = {
   REGISTER_SUCCESS: "Usuario registrado exitosamente",
   LOGIN_SUCCESS: "Login exitoso",
   FAVORITE_ADDED: "Pokémon añadido a favoritos.",
   FAVORITE_REMOVED: "Pokémon eliminado de favoritos.",
-  FAVORITES_FETCHED: "Lista de Favoritos obtenida exitosamente."
+  FAVORITES_FETCHED: "Lista de Favoritos obtenida exitosamente.",
+  HISTORY_FETCHED: "Historial de búsqueda obtenido exitosamente.",
+  HISTORY_ENTRY_ADDED: "Término de búsqueda guardado.",
+  HISTORY_ENTRY_REMOVED: "Término de búsqueda eliminado.",
+};
+
+/**
+ * @constant ENVIRONMENT_MESSAGES
+ * @description Mensajes para indicar el entorno de ejecución de la aplicación.
+ * @property {string} DEVELOPMENT - Mensaje para el entorno de desarrollo.
+ * @property {string} PRODUCTION - Mensaje para el entorno de producción.
+ */
+export const ENVIRONMENT_MESSAGES = {
+  DEVELOPMENT: "La aplicación está corriendo en entorno de desarrollo.",
+  PRODUCTION: "La aplicación está corriendo en entorno de producción.",
 };

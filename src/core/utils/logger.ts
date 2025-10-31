@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import chalk from "chalk";
 
 export const logger = {
   log: (message: string) => console.log(chalk.white(message)),

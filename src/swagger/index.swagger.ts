@@ -34,6 +34,10 @@ export const swaggerDefinitionBase = {
     {
       "name": "Favoritos",
       "description": "Endpoints para gestionar los Pokémon favoritos del usuario."
+    },
+    {
+      "name": "Historial",
+      "description": "Endpoints para gestionar el historial de búsqueda del usuario."
     }
   ],
   /**

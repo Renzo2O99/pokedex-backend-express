@@ -35,6 +35,12 @@ if (!JWT_SECRET) {
  */
 export const authMiddleware = (req: Request, _res: Response, next: NextFunction): void => {
 	const authHeader = req.headers.authorization;
+	
+	if (!authHeader) {
+		logger.warn(`Petición bloqueada: Falta el encabezado de autorización para ${req.method} ${req.originalUrl}`);
+		throw new UnauthorizedError(ERROR_MESSAGES.TOKEN_REQUIRED);
+	}
+
 	const token = authHeader.startsWith(AUTH_TOKEN_PREFIX) ? authHeader.split(" ")[1] : null;
 
 	if (!token) {

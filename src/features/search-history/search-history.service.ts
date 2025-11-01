@@ -8,7 +8,7 @@
 
 import { db } from "../../core/db";
 import { searchHistory } from "../../core/db/schema";
-import { and, eq, desc } from "drizzle-orm";
+import { and, desc, eq, notInArray } from "drizzle-orm";
 import { logger } from "../../core/utils/logger";
 import type { SearchHistoryEntry } from "./search-history.types";
 

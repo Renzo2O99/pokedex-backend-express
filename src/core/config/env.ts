@@ -1,3 +1,5 @@
+// src/core/config/env.ts
+
 import { z } from "zod";
 import { logger } from "../utils/logger";
 

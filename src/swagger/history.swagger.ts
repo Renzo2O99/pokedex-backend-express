@@ -1,3 +1,13 @@
+// src/swagger/history.swagger.ts
+
+/**
+ * @fileoverview Definiciones de rutas OpenAPI/Swagger para la feature de Historial de Búsqueda.
+ * @module swagger/history
+ */
+
+/**
+ * @description Objeto que define las rutas y operaciones para el historial de búsqueda.
+ */
 export const historyPaths = {
   "/search-history": {
     "get": {

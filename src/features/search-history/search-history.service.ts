@@ -1,14 +1,34 @@
+// src/features/search-history/search-history.service.ts
+
+/**
+ * @fileoverview Servicio que maneja la lógica de negocio relacionada con el historial de búsqueda de los usuarios.
+ * Proporciona métodos para gestionar las operaciones CRUD del historial en la base de datos, incluyendo limpieza.
+ * @module features/search-history/search-history.service
+ */
+
 import { db } from "../../core/db";
 import { searchHistory } from "../../core/db/schema";
 import { and, eq, desc, inArray, notInArray } from "drizzle-orm"; 
 import { logger } from "../../core/utils/logger";
 
+/**
+ * @constant {number} HISTORY_LIMIT - El número máximo de entradas de historial a mantener por usuario.
+ */
 const HISTORY_LIMIT = 25;
 
+/**
+ * @class SearchHistoryService
+ * @description Servicio que maneja la lógica de negocio para el historial de búsqueda de los usuarios.
+ * Incluye métodos para obtener, añadir, eliminar y limpiar entradas del historial.
+ */
 export class SearchHistoryService {
 
   /**
   * Obtiene el historial de un usuario, limitado a las N entradas más recientes.
+  * @async
+  * @param {number} userId - ID del usuario cuyo historial se desea obtener.
+  * @returns {Promise<Array<{id: number, userId: number, searchTerm: string, createdAt: Date}>>} 
+  *          Un array de entradas del historial de búsqueda.
   */
   public async getHistoryByUserId(userId: number) {
     logger.info(`Buscando historial para el usuario ID: ${userId}`);
@@ -21,6 +41,11 @@ export class SearchHistoryService {
 
   /**
   * Añade un término de búsqueda. Si ya existe, actualiza su "createdAt" para mantenerlo relevante en la lista.
+  * @async
+  * @param {number} userId - ID del usuario que añade el término.
+  * @param {string} searchTerm - El término de búsqueda a añadir.
+  * @returns {Promise<{id: number, userId: number, searchTerm: string, createdAt: Date}>} 
+  *          La entrada del historial creada o actualizada.
   */
   public async addSearchTerm(userId: number, searchTerm: string) {
     logger.info(`Guardando historial (User: ${userId}, Term: ${searchTerm})`);
@@ -47,6 +72,10 @@ export class SearchHistoryService {
 
   /**
   * Elimina una entrada de historial específica por su ID.
+  * @async
+  * @param {number} entryId - ID de la entrada del historial a eliminar.
+  * @returns {Promise<{id: number, userId: number, searchTerm: string, createdAt: Date} | undefined>} 
+  *          La entrada eliminada, o undefined si no se encontró.
   */
   public async removeSearchTerm(entryId: number) {
     logger.info(`Eliminando entrada de historial ID: ${entryId}`);
@@ -60,6 +89,10 @@ export class SearchHistoryService {
 
   /**
   * Busca una entrada de historial por su ID (para verificar propiedad antes de borrar).
+  * @async
+  * @param {number} entryId - ID de la entrada del historial a buscar.
+  * @returns {Promise<{id: number, userId: number, searchTerm: string, createdAt: Date} | undefined>} 
+  *          La entrada encontrada, o undefined si no existe.
   */
   public async findHistoryEntryById(entryId: number) {
     return db.query.searchHistory.findFirst({
@@ -70,6 +103,10 @@ export class SearchHistoryService {
   /**
   * Rutina de limpieza. Se asegura de que el usuario no tenga más de N entradas.
   * Elimina las entradas más antiguas que excedan el HISTORY_LIMIT.
+  * @private
+  * @async
+  * @param {number} userId - ID del usuario cuyo historial se va a limpiar.
+  * @returns {Promise<void>}
   */
   private async _trimHistory(userId: number): Promise<void> {
     try {

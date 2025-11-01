@@ -1,4 +1,4 @@
-// backend-express/src/types/express.d.ts
+// src/types/express.d.ts
 
 /**
  * @fileoverview Extiende las definiciones de tipos globales para el objeto Request de Express.

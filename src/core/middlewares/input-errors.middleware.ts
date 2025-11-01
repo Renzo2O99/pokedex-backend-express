@@ -1,4 +1,4 @@
-// backend-express/src/core/middleware/input-errors.middleware.ts
+// src/core/middlewares/input-errors.middleware.ts
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import { ERROR_MESSAGES } from "../constants"; // Importa tus constantes

@@ -1,4 +1,4 @@
-// backend-express/src/core/middlewares/rate-limit.middleware.ts
+// src/core/middlewares/rate-limit.middleware.ts
 import rateLimit from "express-rate-limit";
 import { ERROR_MESSAGES } from "../constants"; // Importa tus constantes
 
@@ -36,5 +36,3 @@ export const authRateLimiter = rateLimit({
   legacyHeaders: false, // Deshabilita las cabeceras antiguas `X-RateLimit-*`
 });
 
-// Puedes añadir otros limitadores aquí si necesitas diferentes reglas para otras rutas
-// export const generalRateLimiter = rateLimit({ windowMs: 1 * 60 * 1000, max: 100 });

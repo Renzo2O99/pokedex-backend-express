@@ -1,5 +1,4 @@
-// backend-express/src/core/middlewares/error.middleware.ts
-// backend-express/src/core/middleware/error.middleware.ts
+// src/core/middlewares/error.middleware.ts
 import { Request, Response, NextFunction } from "express";
 import { GeneralError } from "../utils/errors";
 

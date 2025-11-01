@@ -1,8 +1,11 @@
+// src/core/config/swagger.config.ts
+
 import swaggerJSDoc from "swagger-jsdoc";
 import { swaggerDefinitionBase } from "../../swagger/index.swagger";
 import { authPaths } from "../../swagger/auth.swagger";
 import { favoritesPaths } from "../../swagger/favorites.swagger";
 import { historyPaths } from "../../swagger/history.swagger";
+import { customListsPaths } from "../../swagger/custom-lists.swagger";
 
 /**
  * @fileoverview Configuración para generar la especificación OpenAPI usando swagger-jsdoc.
@@ -19,6 +22,7 @@ const swaggerDefinition = {
     ...authPaths,
     ...favoritesPaths,
     ...historyPaths,
+    ...customListsPaths,
   },
 };
 

@@ -1,4 +1,4 @@
-// backend-express/src/core/middleware/auth.middleware.ts
+// src/core/middlewares/auth.middleware.ts
 import "dotenv/config";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";

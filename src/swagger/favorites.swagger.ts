@@ -1,3 +1,13 @@
+// src/swagger/favorites.swagger.ts
+
+/**
+ * @fileoverview Definiciones de rutas OpenAPI/Swagger para la feature de Favoritos.
+ * @module swagger/favorites
+ */
+
+/**
+ * @description Objeto que define las rutas y operaciones para los favoritos.
+ */
 export const favoritesPaths = {
   "/favorites": {
     "get": {

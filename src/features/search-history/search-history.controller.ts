@@ -1,3 +1,11 @@
+// src/features/search-history/search-history.controller.ts
+
+/**
+ * @fileoverview Controlador para manejar la lógica del historial de búsqueda de los usuarios.
+ * Proporciona métodos para obtener, añadir y eliminar términos de búsqueda del historial.
+ * @module features/search-history/search-history.controller
+ */
+
 import { Request, Response } from "express";
 import { SearchHistoryService } from "./search-history.service";
 import { logger } from "../../core/utils/logger";
@@ -7,8 +15,21 @@ import { JwtPayload } from "../../types/express.d";
 
 const historyService = new SearchHistoryService();
 
+/**
+ * @class SearchHistoryController
+ * @description Controlador que maneja las solicitudes relacionadas con el historial de búsqueda de los usuarios.
+ * Permite a los usuarios ver, añadir y eliminar sus términos de búsqueda.
+ */
 export class SearchHistoryController {
 
+  /**
+   * @static
+   * @async
+   * @description Maneja la solicitud para obtener el historial de búsqueda del usuario autenticado.
+   * @param {Request} req - El objeto de solicitud de Express.
+   * @param {Response} res - El objeto de respuesta de Express.
+   * @returns {Promise<Response>} Una respuesta JSON con el historial de búsqueda del usuario.
+   */
   public static async handleGetHistory(req: Request, res: Response): Promise<Response> {
     const user = req.user as JwtPayload;
     const history = await historyService.getHistoryByUserId(user.id);
@@ -19,6 +40,15 @@ export class SearchHistoryController {
     });
   }
 
+  /**
+   * @static
+   * @async
+   * @description Maneja la solicitud para añadir un nuevo término de búsqueda al historial del usuario autenticado.
+   * Si el término ya existe, actualiza su marca de tiempo.
+   * @param {Request} req - El objeto de solicitud de Express.
+   * @param {Response} res - El objeto de respuesta de Express.
+   * @returns {Promise<Response>} Una respuesta JSON con la nueva entrada del historial.
+   */
   public static async handleAddTerm(req: Request, res: Response): Promise<Response> {
     const user = req.user as JwtPayload;
     const { searchTerm } = req.body;
@@ -32,6 +62,16 @@ export class SearchHistoryController {
     });
   }
 
+  /**
+   * @static
+   * @async
+   * @description Maneja la solicitud para eliminar una entrada específica del historial de búsqueda del usuario autenticado.
+   * @param {Request} req - El objeto de solicitud de Express.
+   * @param {Response} res - El objeto de respuesta de Express.
+   * @returns {Promise<Response>} Una respuesta JSON confirmando la eliminación.
+   * @throws {NotFoundError} Si la entrada del historial no se encuentra.
+   * @throws {UnauthorizedError} Si el usuario no es el propietario de la entrada del historial.
+   */
   public static async handleDeleteTerm(req: Request, res: Response): Promise<Response> {
     const user = req.user as JwtPayload;
     const entryId = parseInt(req.params.id, 10);

@@ -1,4 +1,4 @@
-// backend-express/src/features/auth/auth.routes.ts
+// src/features/auth/auth.routes.ts
 import { Router } from "express";
 import { AuthController } from "./auth.controller";
 import { catchAsync } from "../../core/utils/catchAsync";
@@ -15,7 +15,8 @@ const router = Router();
  * @route POST /api/auth/register
  * @access Public
  * @param {string} path - Ruta del endpoint.
- * @param {Function} middleware - Middleware `catchAsync` que envuelve al controlador.
+ * @param {Array<Function>} validateRegister - Middlewares de validación para el registro.
+ * @param {Function} authRateLimiter - Middleware de limitación de peticiones.
  * @param {Function} handler - Controlador `AuthController.register`.
  */
 router.post(
@@ -30,7 +31,8 @@ router.post(
  * @route POST /api/auth/login
  * @access Public
  * @param {string} path - Ruta del endpoint.
- * @param {Function} middleware - Middleware `catchAsync` que envuelve al controlador.
+ * @param {Array<Function>} validateLogin - Middlewares de validación para el inicio de sesión.
+ * @param {Function} authRateLimiter - Middleware de limitación de peticiones.
  * @param {Function} handler - Controlador `AuthController.login`.
  */
 router.post(

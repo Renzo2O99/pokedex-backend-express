@@ -79,6 +79,12 @@ export const ERROR_MESSAGES = {
   VALIDATION_SEARCH_TERM_REQUIRED: "El \"searchTerm\" es requerido y debe ser un string.",
   HISTORY_ENTRY_NOT_FOUND: "Entrada de historial no encontrada.",
   HISTORY_FORBIDDEN: "No tienes permiso para eliminar esta entrada.",
+  VALIDATION_LIST_NAME_REQUIRED: "El nombre de la lista es requerido.",
+  VALIDATION_LIST_ID_REQUIRED: "El listId es requerido y debe ser un número.",
+  LIST_NOT_FOUND: "Lista no encontrada.",
+  LIST_FORBIDDEN: "No tienes permiso para modificar o ver esta lista.",
+  POKEMON_ALREADY_IN_LIST: "El Pokémon ya existe en esta lista.",
+  POKEMON_NOT_IN_LIST: "El Pokémon no se encontró en esta lista.",
 };
 
 /**
@@ -102,6 +108,13 @@ export const SUCCESS_MESSAGES = {
   HISTORY_FETCHED: "Historial de búsqueda obtenido exitosamente.",
   HISTORY_ENTRY_ADDED: "Término de búsqueda guardado.",
   HISTORY_ENTRY_REMOVED: "Término de búsqueda eliminado.",
+  LIST_CREATED: "Lista creada exitosamente.",
+  LIST_UPDATED: "Lista actualizada exitosamente.",
+  LIST_DELETED: "Lista eliminada exitosamente.",
+  LISTS_FETCHED: "Listas obtenidas exitosamente.",
+  LIST_DETAILS_FETCHED: "Detalles de la lista obtenidos exitosamente.",
+  POKEMON_ADDED_TO_LIST: "Pokémon añadido a la lista.",
+  POKEMON_REMOVED_FROM_LIST: "Pokémon eliminado de la lista.",
 };
 
 /**

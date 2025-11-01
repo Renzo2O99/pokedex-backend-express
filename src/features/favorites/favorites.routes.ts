@@ -1,9 +1,20 @@
+// src/features/favorites/favorites.routes.ts
+
+/**
+ * @fileoverview Rutas para la gestión de Pokémon favoritos de los usuarios.
+ * Proporciona endpoints para obtener, añadir y eliminar favoritos.
+ * @module features/favorites/favorites.routes
+ */
+
 import { Router } from "express";
 import { catchAsync } from "../../core/utils/catchAsync";
 import { FavoritesController } from "./favorites.controller";
-import { authMiddleware } from "../../core/middleware/auth.middleware";
+import { authMiddleware } from "../../core/middlewares/auth.middleware";
 import { validateAddFavorite, validateRemoveFavorite } from "./favorites.validation";
 
+/**
+ * @constant {Router} router - Instancia del enrutador de Express para las rutas de favoritos.
+ */
 const router = Router();
 
 /**
@@ -42,4 +53,8 @@ router.delete(
   catchAsync(FavoritesController.handleRemoveFavorite)
 );
 
+/**
+ * @exports favoritesRoutes
+ * @description Exporta el enrutador configurado para ser usado en `index.ts`.
+ */
 export const favoritesRoutes = router;

@@ -1,4 +1,4 @@
-// backend-express/src/swagger/auth.swagger.ts
+// src/swagger/auth.swagger.ts
 
 /**
  * @fileoverview Definiciones de rutas OpenAPI/Swagger para la feature de Autenticación.

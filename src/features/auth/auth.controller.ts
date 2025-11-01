@@ -1,3 +1,11 @@
+// src/features/auth/auth.controller.ts
+
+/**
+ * @fileoverview Controlador para manejar la lógica de autenticación de usuarios.
+ * Proporciona métodos para registrar y loguear usuarios, interactuando con `AuthService`.
+ * @module features/auth/auth.controller
+ */
+
 import { Request, Response } from "express";
 import { AuthService } from "./auth.service";
 import { logger } from "../../core/utils/logger";

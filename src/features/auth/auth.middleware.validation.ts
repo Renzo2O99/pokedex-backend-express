@@ -1,6 +1,6 @@
-// backend-express/src/features/auth/auth.middleware.validation.ts
+// src/features/auth/auth.middleware.validation.ts
 import { body } from "express-validator";
-import { handleInputErrors } from "../../core/middleware/input-errors.middleware";
+import { handleInputErrors } from "../../core/middlewares/input-errors.middleware";
 import { ERROR_MESSAGES } from "../../core/constants";
 
 /**

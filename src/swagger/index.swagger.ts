@@ -1,4 +1,4 @@
-// backend-express/src/swagger/index.swagger.ts
+// src/swagger/index.swagger.ts
 
 /**
  * @fileoverview Definición base de OpenAPI/Swagger para la API Pokédex.
@@ -38,6 +38,10 @@ export const swaggerDefinitionBase = {
     {
       "name": "Historial",
       "description": "Endpoints para gestionar el historial de búsqueda del usuario."
+    },
+    {
+      "name": "Listas Personalizadas",
+      "description": "Endpoints para crear y gestionar listas de Pokémon."
     }
   ],
   /**

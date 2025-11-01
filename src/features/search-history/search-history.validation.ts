@@ -15,11 +15,13 @@ import { ERROR_MESSAGES } from "../../core/constants";
  * Verifica que el campo `searchTerm` en el cuerpo de la solicitud sea un string no vacío.
  */
 export const validateAddTerm = [
-  body("searchTerm")
-    .trim()
-    .notEmpty().withMessage(ERROR_MESSAGES.VALIDATION_SEARCH_TERM_REQUIRED)
-    .isString().withMessage(ERROR_MESSAGES.VALIDATION_SEARCH_TERM_REQUIRED),
-  handleInputErrors,
+	body("searchTerm")
+		.trim()
+		.notEmpty()
+		.withMessage(ERROR_MESSAGES.VALIDATION_SEARCH_TERM_REQUIRED)
+		.isString()
+		.withMessage(ERROR_MESSAGES.VALIDATION_SEARCH_TERM_REQUIRED),
+	handleInputErrors,
 ];
 
 /**
@@ -28,7 +30,6 @@ export const validateAddTerm = [
  * Verifica que el parámetro `id` en la URL sea un número entero válido.
  */
 export const validateDeleteTerm = [
-  param("id")
-    .isInt({ min: 1 }).withMessage("El ID de la entrada debe ser un número válido."),
-  handleInputErrors,
+	param("id").isInt({ min: 1 }).withMessage("El ID de la entrada debe ser un número válido."),
+	handleInputErrors,
 ];

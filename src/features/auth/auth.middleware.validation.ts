@@ -14,19 +14,18 @@ import { ERROR_MESSAGES } from "../../core/constants";
  * @type {Array<Function>}
  */
 export const validateRegister = [
-  body("username")
-    .trim()
-    .notEmpty().withMessage(ERROR_MESSAGES.VALIDATION_USERNAME_REQUIRED)
-    .isLength({ min: 3 }).withMessage(ERROR_MESSAGES.VALIDATION_USERNAME_MIN_LENGTH),
-    
-  body("email")
-    .trim()
-    .isEmail().withMessage(ERROR_MESSAGES.VALIDATION_EMAIL_INVALID),
-    
-  body("password")
-    .isLength({ min: 6 }).withMessage(ERROR_MESSAGES.VALIDATION_PASSWORD_MIN_LENGTH),
-  
-  handleInputErrors, 
+	body("username")
+		.trim()
+		.notEmpty()
+		.withMessage(ERROR_MESSAGES.VALIDATION_USERNAME_REQUIRED)
+		.isLength({ min: 3 })
+		.withMessage(ERROR_MESSAGES.VALIDATION_USERNAME_MIN_LENGTH),
+
+	body("email").trim().isEmail().withMessage(ERROR_MESSAGES.VALIDATION_EMAIL_INVALID),
+
+	body("password").isLength({ min: 6 }).withMessage(ERROR_MESSAGES.VALIDATION_PASSWORD_MIN_LENGTH),
+
+	handleInputErrors,
 ];
 
 /**
@@ -35,12 +34,20 @@ export const validateRegister = [
  * @type {Array<Function>}
  */
 export const validateLogin = [
-  body("email")
-    .trim()
-    .isEmail().withMessage(ERROR_MESSAGES.VALIDATION_EMAIL_INVALID),
-    
-  body("password")
-    .notEmpty().withMessage(ERROR_MESSAGES.VALIDATION_PASSWORD_REQUIRED),
+	body("email").trim().isEmail().withMessage(ERROR_MESSAGES.VALIDATION_EMAIL_INVALID),
 
-  handleInputErrors,
+	body("password").notEmpty().withMessage(ERROR_MESSAGES.VALIDATION_PASSWORD_REQUIRED),
+
+	handleInputErrors,
+];
+
+/**
+ * @description Array de middlewares para validar el cambio de contraseña.
+ * Verifica `oldPassword` y `newPassword`.
+ * @type {Array<Function>}
+ */
+export const validateChangePassword = [
+	body("oldPassword").notEmpty().withMessage(ERROR_MESSAGES.VALIDATION_PASSWORD_OLD_REQUIRED),
+	body("newPassword").isLength({ min: 6 }).withMessage(ERROR_MESSAGES.VALIDATION_PASSWORD_NEW_MIN_LENGTH),
+	handleInputErrors,
 ];

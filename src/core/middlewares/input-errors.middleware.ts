@@ -1,5 +1,5 @@
 // src/core/middlewares/input-errors.middleware.ts
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import { ERROR_MESSAGES } from "../constants"; // Importa tus constantes
 
@@ -18,26 +18,29 @@ import { ERROR_MESSAGES } from "../constants"; // Importa tus constantes
  * @param {NextFunction} next - La función para pasar al siguiente middleware.
  */
 export const handleInputErrors = (req: Request, res: Response, next: NextFunction): void => {
-  const errors = validationResult(req);
+	const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    const formattedErrors = errors.array().reduce((acc, error) => {
-      if (error.type === "field") {
-        if (!acc[error.path]) {
-          acc[error.path] = [];
-        }
-        acc[error.path].push(error.msg);
-      }
-      return acc;
-    }, {} as Record<string, string[]>);
+	if (!errors.isEmpty()) {
+		const formattedErrors = errors.array().reduce(
+			(acc, error) => {
+				if (error.type === "field") {
+					if (!acc[error.path]) {
+						acc[error.path] = [];
+					}
+					acc[error.path].push(error.msg);
+				}
+				return acc;
+			},
+			{} as Record<string, string[]>,
+		);
 
-    res.status(400).json({
-      "message": ERROR_MESSAGES.INVALID_INPUT,
-      "errors": formattedErrors
-    });
-    return;
-  }
+		res.status(400).json({
+			message: ERROR_MESSAGES.INVALID_INPUT,
+			errors: formattedErrors,
+		});
+		return;
+	}
 
-  // Si no hay errores, continúa
-  next();
+	// Si no hay errores, continúa
+	next();
 };

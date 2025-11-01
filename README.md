@@ -20,23 +20,28 @@
 
 ## 🌟 Características Principales ✨
 
-### 🔐 Autenticación Segura
+### 🔐 Seguridad
 <div style="background: rgba(16, 185, 129, 0.1); padding: 1.5rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #10b981;">
   <ul style="margin: 0; padding-left: 1.2rem;">
-    <li>Autenticación con JWT</li>
+    <li>Autenticación con JWT seguro</li>
     <li>Hash de contraseñas con bcrypt</li>
-    <li>Rutas protegidas con roles</li>
-    <li>Renovación de tokens</li>
+    <li>Protección de cabeceras HTTP con Helmet</li>
+    <li>Rutas protegidas con middleware de autenticación</li>
+    <li>Protección contra ataques de fuerza bruta</li>
+    <li>Configuración segura de CORS</li>
+    <li>Manejo seguro de sesiones y tokens</li>
   </ul>
 </div>
 
 ### 🎮 Gestión de Pokémon
 <div style="background: rgba(99, 102, 241, 0.1); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid #6366f1;">
   <ul style="margin: 0; padding-left: 1.2rem;">
-    <li>Búsqueda avanzada de Pokémon</li>
-    <li>Sistema de favoritos intuitivo</li>
-    <li>Historial de búsquedas personalizado</li>
-    <li>Listas personalizables</li>
+    <li>Búsqueda avanzada de Pokémon con filtros</li>
+    <li>Sistema de favoritos con gestión completa</li>
+    <li>Historial de búsquedas persistente</li>
+    <li>Listas personalizables con múltiples Pokémon</li>
+    <li>Gestión de perfil de usuario</li>
+    <li>Estadísticas de uso</li>
   </ul>
 </div>
 
@@ -44,22 +49,26 @@
 <div style="background: rgba(245, 158, 11, 0.1); padding: 1.5rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #f59e0b;">
   <ul style="margin: 0; padding-left: 1.2rem;">
     <li>Documentación interactiva con Swagger/OpenAPI</li>
-    <li>Tipado estático con TypeScript</li>
-    <li>Configuración mediante variables de entorno</li>
-    <li>Sistema de logging detallado</li>
-    <li>Manejo centralizado de errores</li>
+    <li>Tipado estático con TypeScript en todo el proyecto</li>
+    <li>Validación de esquemas con Zod</li>
+    <li>Sistema de logging estructurado con Chalck</li>
+    <li>Manejo centralizado de errores con códigos personalizados</li>
+    <li>Migraciones de base de datos con Drizzle</li>
+    <li>Configuración de variables de entorno</li>
+    <li>Testing con Jest (próximamente)</li>
   </ul>
 </div>
 
 ## 🛠️ Tecnologías Utilizadas
 
 - **Backend**: Node.js + Express
-- **Lenguaje**: TypeScript
+- **Lenguaje**: TypeScript 5.x
 - **Base de Datos**: PostgreSQL + Drizzle ORM
-- **Autenticación**: JWT
-- **Documentación**: Swagger UI
+- **Autenticación**: JWT con refresh tokens
+- **Validación**: Zod para validación de esquemas
+- **Documentación**: Swagger UI / OpenAPI 3.0
+- **Seguridad**: Helmet, rate limiting, CORS
 - **Variables de Entorno**: dotenv
-- **Estilo de Código**: ESLint + Prettier
 
 ## 🚀 Comenzando
 
@@ -112,28 +121,72 @@
 
 ## 📚 Documentación de la API
 
-Explora la documentación interactiva de la API:
+La API sigue el estándar RESTful y está completamente documentada con OpenAPI 3.0. Puedes explorar la documentación interactiva en:
 
 - **Interfaz Swagger UI**: [http://localhost:4000/api-docs](http://localhost:4000/api-docs)
 - **Especificación OpenAPI**: [http://localhost:4000/api-docs.json](http://localhost:4000/api-docs.json)
+
+### Endpoints Principales
+
+#### Autenticación
+- `POST /api/auth/register` - Registro de nuevos usuarios
+- `POST /api/auth/login` - Inicio de sesión
+- `GET /api/auth/me` - Obtener perfil de usuario
+- `PUT /api/auth/password` - Cambiar contraseña
+
+#### Favoritos
+- `GET /api/favorites` - Obtener lista de favoritos
+- `POST /api/favorites` - Añadir a favoritos
+- `DELETE /api/favorites/:id` - Eliminar de favoritos
+
+#### Listas Personalizadas
+- `GET /api/lists` - Obtener todas las listas
+- `POST /api/lists` - Crear nueva lista
+- `GET /api/lists/:id` - Obtener lista por ID
+- `PUT /api/lists/:id` - Actualizar lista
+- `DELETE /api/lists/:id` - Eliminar lista
+
+#### Historial de Búsqueda
+- `GET /api/search-history` - Obtener historial
+- `POST /api/search-history` - Añadir al historial
+- `DELETE /api/search-history/:id` - Eliminar del historial
 
 ## 🏗️ Estructura del Proyecto
 
 ```
 src/
 ├── core/                # Lógica central de la aplicación
-│   ├── config/         # Archivos de configuración
-│   ├── db/             # Configuración de la base de datos
-│   ├── middlewares/    # Middlewares personalizados
-│   └── utils/          # Utilidades y helpers
+│   ├── config/         # Configuraciones (base de datos, variables de entorno, etc.)
+│   ├── db/             # Configuración y migraciones de la base de datos
+│   ├── middlewares/    # Middlewares personalizados (auth, validación, manejo de errores)
+│   └── utils/          # Utilidades, helpers y constantes
+│
 ├── features/           # Módulos de características
 │   ├── auth/           # Autenticación y autorización
+│   │   ├── auth.controller.ts  # Controladores
+│   │   ├── auth.routes.ts      # Rutas
+│   │   ├── auth.service.ts     # Lógica de negocio
+│   │   ├── auth.types.ts       # Tipos e interfaces
+│   │   └── auth.validation.ts  # Validaciones
 │   ├── favorites/      # Gestión de Pokémon favoritos
 │   ├── search-history/ # Historial de búsquedas
 │   └── custom-lists/   # Listas personalizadas
-├── types/              # Definiciones de tipos TypeScript
+│
+├── types/              # Tipos globales de TypeScript
 └── index.ts            # Punto de entrada de la aplicación
 ```
+
+## 🔒 Seguridad
+
+El proyecto implementa varias medidas de seguridad:
+
+- **Autenticación**: JWT con expiración y renovación
+- **Protección de rutas**: Middleware de autenticación en endpoints sensibles
+- **Validación de entrada**: Todos los datos de entrada son validados
+- **Rate Limiting**: Protección contra ataques de fuerza bruta
+- **Seguridad HTTP**: Headers de seguridad con Helmet
+- **CORS**: Configuración estricta de orígenes permitidos
+- **Variables de entorno**: Configuración sensible fuera del código
 
 ## 🤝 Contribuyendo
 

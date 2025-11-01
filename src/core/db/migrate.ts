@@ -31,13 +31,13 @@ const prodUrl = process.env.DATABASE_URL;
 let connectionString: string;
 
 if (isDevelopment) {
-  if (!devUrl) throw new Error("DEVELOPMENT_DATABASE_URL no está definida en .env");
-  connectionString = devUrl;
-  logger.info("Modo [Desarrollo] - Conectando a la base de datos de desarrollo para migración.");
+	if (!devUrl) throw new Error("DEVELOPMENT_DATABASE_URL no está definida en .env");
+	connectionString = devUrl;
+	logger.info("Modo [Desarrollo] - Conectando a la base de datos de desarrollo para migración.");
 } else {
-  if (!prodUrl) throw new Error("DATABASE_URL no está definida en .env para producción");
-  connectionString = prodUrl;
-  logger.warn("Modo [Producción] - Conectando a la base de datos de PRODUCCIÓN para migración.");
+	if (!prodUrl) throw new Error("DATABASE_URL no está definida en .env para producción");
+	connectionString = prodUrl;
+	logger.warn("Modo [Producción] - Conectando a la base de datos de PRODUCCIÓN para migración.");
 }
 
 /**
@@ -48,29 +48,29 @@ if (isDevelopment) {
  * @returns {Promise<void>}
  */
 const runMigrate = async () => {
-  logger.await("Iniciando migración...");
+	logger.await("Iniciando migración...");
 
-  /**
-   * @constant {postgres.SqlJs} migrationClient - Cliente de PostgreSQL para la migración.
-   */
-  const migrationClient = postgres(connectionString, {
-    "ssl": "require",
-    "max": 1,
-  });
+	/**
+	 * @constant {postgres.SqlJs} migrationClient - Cliente de PostgreSQL para la migración.
+	 */
+	const migrationClient = postgres(connectionString, {
+		ssl: "require",
+		max: 1,
+	});
 
-  /**
-   * @constant {PostgresJsDatabase} db - Instancia de Drizzle ORM para la migración.
-   */
-  const db = drizzle(migrationClient);
+	/**
+	 * @constant {PostgresJsDatabase} db - Instancia de Drizzle ORM para la migración.
+	 */
+	const db = drizzle(migrationClient);
 
-  await migrate(db, { "migrationsFolder": "drizzle" });
+	await migrate(db, { migrationsFolder: "drizzle" });
 
-  logger.success("¡Migración completada exitosamente!");
-  await migrationClient.end();
-  process.exit(0);
+	logger.success("¡Migración completada exitosamente!");
+	await migrationClient.end();
+	process.exit(0);
 };
 
-runMigrate().catch(err => {
-  logger.error("Error durante la migración:", err);
-  process.exit(1);
+runMigrate().catch((err) => {
+	logger.error("Error durante la migración:", err);
+	process.exit(1);
 });

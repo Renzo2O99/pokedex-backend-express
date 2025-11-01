@@ -1,5 +1,5 @@
 // src/core/middlewares/error.middleware.ts
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { GeneralError } from "../utils/errors";
 
 import { logger } from "../utils/logger";
@@ -21,25 +21,19 @@ import { logger } from "../utils/logger";
  * @param {NextFunction} next - La función para pasar al siguiente middleware (requerida por Express para identificarlo como manejador de errores).
  * @returns {void} - No devuelve valor, envía la respuesta HTTP directamente.
  */
-export const errorHandler = (
-  error: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
-  if (error instanceof GeneralError) {
-    logger.warn(`Error controlado [${error.statusCode}]: ${error.message} (Ruta: ${req.method} ${req.originalUrl})`);
-    res.status(error.statusCode).json({
-      "status": "error",
-      "message": error.message,
-    });
-    return;
-  }
-  logger.error(`Error no controlado en ${req.method} ${req.originalUrl}:`, error);
-  // En producción, podrías querer loguear menos detalles o enviar a un servicio de monitoreo
+export const errorHandler = (error: Error, req: Request, res: Response): void => {
+	if (error instanceof GeneralError) {
+		logger.warn(`Error controlado [${error.statusCode}]: ${error.message} (Ruta: ${req.method} ${req.originalUrl})`);
+		res.status(error.statusCode).json({
+			status: "error",
+			message: error.message,
+		});
+		return;
+	}
+	logger.error(`Error no controlado en ${req.method} ${req.originalUrl}:`, error);
 
-  res.status(500).json({
-    "status": "error",
-    "message": "Error interno del servidor.", // Usar constante aquí también sería bueno
-  });
+	res.status(500).json({
+		status: "error",
+		message: "Error interno del servidor.", // Usar constante aquí también sería bueno
+	});
 };

@@ -7,6 +7,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { logger } from "../../core/utils/logger";
 import { ERROR_MESSAGES } from "../../core/constants";
+import { ConflictError, InternalServerError, UnauthorizedError } from "../../core/utils/errors";
+import type { RegisteredUser, LoginResult, UserWithPassword } from "./auth.types";
 
 /**
  * @class AuthService
@@ -14,107 +16,132 @@ import { ERROR_MESSAGES } from "../../core/constants";
  * incluyendo registro, inicio de sesión y búsqueda de usuarios.
  */
 export class AuthService {
-  /**
-   * Registra un nuevo usuario en el sistema.
-   * @param {string} username - Nombre de usuario único.
-   * @param {string} email - Correo electrónico del usuario.
-   * @param {string} pass - Contraseña en texto plano que será hasheada.
-   * @returns {Promise<{id: string, username: string, email: string}>} Usuario registrado sin información sensible.
-   * @throws {Error} Si ocurre un error durante el registro.
-   */
-  public async register(username: string, email: string, pass: string) {
-    // 1. Hashear la contraseña
-    const passwordHash = await bcrypt.hash(pass, 10);
+	/**
+	 * Registra un nuevo usuario en el sistema.
+	 * @param {string} username - Nombre de usuario único.
+	 * @param {string} email - Correo electrónico del usuario.
+	 * @param {string} pass - Contraseña en texto plano que será hasheada.
+	 * @returns {Promise<RegisteredUser>} Usuario registrado sin información sensible.
+	 * @throws {ConflictError} Si el nombre de usuario o el email ya existen.
+	 * @throws {Error} Si ocurre un error durante el registro.
+	 */
+	public async register(username: string, email: string, pass: string): Promise<RegisteredUser> {
+		// 1. Verificar si el usuario o el email ya existen
+		const existingUserByUsername = await this.findUserByUsername(username);
+		if (existingUserByUsername) {
+			throw new ConflictError(ERROR_MESSAGES.USERNAME_IN_USE);
+		}
 
-    // 2. Insertar el usuario en la Base de Datos
-    const newUser = await db
-      .insert(users)
-      .values({
-        "username": username,
-        "email": email,
-        "passwordHash": passwordHash,
-      })
-      .returning({
-        "id": users.id,
-        "username": users.username,
-        "email": users.email,
-      });
+		const existingUserByEmail = await this.findUserByEmail(email);
+		if (existingUserByEmail) {
+			throw new ConflictError(ERROR_MESSAGES.EMAIL_IN_USE);
+		}
 
-    return newUser[0];
-  }
+		// 2. Hashear la contraseña
+		const passwordHash = await bcrypt.hash(pass, 10);
 
-  /**
-   * Autentica a un usuario y genera un token JWT.
-   * @param {string} email - Correo electrónico del usuario.
-   * @param {string} userPassword - Contraseña en texto plano para autenticación.
-   * @returns {Promise<{token: string, user: {id: string, username: string, email: string}}>} 
-   *          Token JWT e información básica del usuario.
-   * @throws {Error} Si las credenciales son inválidas o hay un error en el servidor.
-   */
-  public async login(email: string, userPassword: string) {
-    const JWT_SECRET = process.env.JWT_SECRET;
+		// 3. Insertar el usuario en la Base de Datos
+		const newUser = await db
+			.insert(users)
+			.values({
+				username: username,
+				email: email,
+				passwordHash: passwordHash,
+			})
+			.returning({
+				id: users.id,
+				username: users.username,
+				email: users.email,
+			});
 
-    if (!JWT_SECRET) {
-      logger.fatal(new Error("JWT_SECRET no está definido en .env"));
-      throw new Error("JWT_SECRET is not defined");
-    }
-    // 1. Encontrar al usuario por su email
-    const user = await db.query.users.findFirst({
-      where: eq(users.email, email),
-    });
+		return newUser[0];
+	}
 
-    if (!user) {
-      throw new Error(ERROR_MESSAGES.USER_NOT_FOUND);
-    }
+	/**
+	 * Autentica a un usuario y genera un token JWT.
+	 * @param {string} email - Correo electrónico del usuario.
+	 * @param {string} userPassword - Contraseña en texto plano para autenticación.
+	 * @returns {Promise<LoginResult>}
+	 *          Token JWT e información básica del usuario.
+	 * @throws {Error} Si las credenciales son inválidas o hay un error en el servidor.
+	 */
+	public async login(email: string, userPassword: string): Promise<LoginResult> {
+		const JWT_SECRET = process.env.JWT_SECRET;
 
-    // 2. Comparar la contraseña enviada con el hash guardado
-    const isPasswordValid = await bcrypt.compare(userPassword, user.passwordHash);
+		if (!JWT_SECRET) {
+			logger.fatal(new InternalServerError(ERROR_MESSAGES.JWT_SECRET_NOT_DEFINED));
+			throw new InternalServerError(ERROR_MESSAGES.JWT_SECRET_NOT_DEFINED);
+		}
+		// 1. Encontrar al usuario por su email
+		const user = await db.query.users.findFirst({
+			where: eq(users.email, email),
+		});
 
-    if (!isPasswordValid) {
-      throw new Error(ERROR_MESSAGES.PASSWORD_INCORRECT);
-    }
+		if (!user) {
+			throw new UnauthorizedError(ERROR_MESSAGES.USER_NOT_FOUND);
+		}
 
-    // 3. Crear el Token JWT
-    const tokenPayload = {
-      "id": user.id,
-      "username": user.username,
-    };
+		// 2. Comparar la contraseña enviada con el hash guardado
+		const isPasswordValid = await bcrypt.compare(userPassword, user.passwordHash);
 
-    const token = jwt.sign(tokenPayload, JWT_SECRET, {
-      "expiresIn": "7d",
-    });
+		if (!isPasswordValid) {
+			throw new UnauthorizedError(ERROR_MESSAGES.PASSWORD_INCORRECT);
+		}
 
-    return {
-      "token": token,
-      "user": {
-        "id": user.id,
-        "username": user.username,
-        "email": user.email,
-      },
-    };
-  }
+		// 3. Crear el Token JWT
+		const tokenPayload = {
+			id: user.id,
+			username: user.username,
+		};
 
-  /**
-   * Busca un usuario por su dirección de correo electrónico.
-   * @param {string} email - Correo electrónico a buscar.
-   * @returns {Promise<{id: string, username: string, email: string, passwordHash: string} | undefined>} 
-   *          El usuario encontrado o undefined si no existe.
-   */
-  public async findUserByEmail(email: string) {
-    return db.query.users.findFirst({
-      where: eq(users.email, email),
-    });
-  }
+		const token = jwt.sign(tokenPayload, JWT_SECRET, {
+			expiresIn: "7d",
+		});
 
-  /**
-   * Busca un usuario por su nombre de usuario.
-   * @param {string} username - Nombre de usuario a buscar.
-   * @returns {Promise<{id: string, username: string, email: string, passwordHash: string} | undefined>} 
-   *          El usuario encontrado o undefined si no existe.
-   */
-  public async findUserByUsername(username: string) {
-    return db.query.users.findFirst({
-      where: eq(users.username, username),
-    });
-  }
+		return {
+			token: token,
+			user: {
+				id: user.id,
+				username: user.username,
+				email: user.email,
+			},
+		};
+	}
+
+	//? --- MÉTODO PARA ACTUALIZAR CONTRASEÑA ---
+	public async updatePassword(userId: number, newPasswordHash: string): Promise<void> {
+		await db.update(users).set({ passwordHash: newPasswordHash }).where(eq(users.id, userId));
+	}
+
+	//? --- MÉTODO PARA BUSCAR USUARIO POR ID ---
+	public async findUserById(userId: number): Promise<UserWithPassword | undefined> {
+		// Devuelve el usuario con su hash de contraseña (para uso interno)
+		return db.query.users.findFirst({
+			where: eq(users.id, userId),
+		});
+	}
+
+	/**
+	 * Busca un usuario por su dirección de correo electrónico.
+	 * @param {string} email - Correo electrónico a buscar.
+	 * @returns {Promise<UserWithPassword | undefined>}
+	 *          El usuario encontrado o undefined si no existe.
+	 */
+	public async findUserByEmail(email: string): Promise<UserWithPassword | undefined> {
+		return db.query.users.findFirst({
+			where: eq(users.email, email),
+		});
+	}
+
+	/**
+	 * Busca un usuario por su nombre de usuario.
+	 * @param {string} username - Nombre de usuario a buscar.
+	 * @returns {Promise<UserWithPassword | undefined>}
+	 *          El usuario encontrado o undefined si no existe.
+	 */
+	public async findUserByUsername(username: string): Promise<UserWithPassword | undefined> {
+		return db.query.users.findFirst({
+			where: eq(users.username, username),
+		});
+	}
 }

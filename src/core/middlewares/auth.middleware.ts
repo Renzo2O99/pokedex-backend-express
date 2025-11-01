@@ -1,11 +1,11 @@
 // src/core/middlewares/auth.middleware.ts
 import "dotenv/config";
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { logger } from "../utils/logger";
-import { JwtPayload } from "../../types/express.d"; // Importa nuestro tipo
+import type { JwtPayload } from "../../types/express.d";
 import { AUTH_TOKEN_PREFIX, ERROR_MESSAGES } from "../constants";
-import { UnauthorizedError, InternalServerError } from "../utils/errors"; // Importa errores
+import { UnauthorizedError } from "../utils/errors";
 
 /**
  * @fileoverview Middleware para autenticar usuarios mediante JWT.
@@ -15,9 +15,9 @@ import { UnauthorizedError, InternalServerError } from "../utils/errors"; // Imp
 const JWT_SECRET = process.env.JWT_SECRET;
 
 if (!JWT_SECRET) {
-  const err = new Error("JWT_SECRET no está definido en las variables de entorno para el middleware de autenticación.");
-  logger.fatal(err);
-  throw err;
+	const err = new Error("JWT_SECRET no está definido en las variables de entorno para el middleware de autenticación.");
+	logger.fatal(err);
+	throw err;
 }
 
 /**
@@ -33,32 +33,33 @@ if (!JWT_SECRET) {
  * @throws {UnauthorizedError} Si el token falta, tiene formato incorrecto, es inválido o ha expirado.
  * @returns {void} Llama a `next()` si el token es válido, o lanza un error.
  */
-export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.startsWith(AUTH_TOKEN_PREFIX)
-                 ? authHeader.split(" ")[1]
-                 : null;
+export const authMiddleware = (req: Request, _res: Response, next: NextFunction): void => {
+	const authHeader = req.headers.authorization;
+	const token = authHeader.startsWith(AUTH_TOKEN_PREFIX) ? authHeader.split(" ")[1] : null;
 
-  if (!token) {
-    logger.warn(`Petición bloqueada: No se proveyó token para ${req.method} ${req.originalUrl}`);
-    throw new UnauthorizedError(ERROR_MESSAGES.TOKEN_REQUIRED);
-  }
+	if (!token) {
+		logger.warn(`Petición bloqueada: No se proveyó token para ${req.method} ${req.originalUrl}`);
+		throw new UnauthorizedError(ERROR_MESSAGES.TOKEN_REQUIRED);
+	}
 
-  try {
-    const payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
+	try {
+		const payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
-    if (!payload || typeof payload !== "object" || !payload.id || !payload.username) {
-        logger.error(`Token válido pero payload inesperado: ${JSON.stringify(payload)}`);
-        throw new Error("Formato de payload de token inválido");
-    }
+		if (!payload || typeof payload !== "object" || !payload.id || !payload.username) {
+			logger.error(`Token válido pero payload inesperado: ${JSON.stringify(payload)}`);
+			throw new UnauthorizedError(ERROR_MESSAGES.TOKEN_PAYLOAD_INVALID);
+		}
 
-    req.user = payload;
+		req.user = payload;
 
-    logger.info(`Usuario autenticado: ${payload.username} (ID: ${payload.id}) para ${req.method} ${req.originalUrl}`);
+		logger.info(`Usuario autenticado: ${payload.username} (ID: ${payload.id}) para ${req.method} ${req.originalUrl}`);
 
-    next();
-  } catch (error: any) {
-    logger.error(`Intento de acceso con token inválido/expirado para ${req.method} ${req.originalUrl}: ${error.message}`);
-    throw new UnauthorizedError(ERROR_MESSAGES.TOKEN_INVALID_OR_EXPIRED);
-  }
+		next();
+	} catch (error: unknown) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		logger.error(
+			`Intento de acceso con token inválido/expirado para ${req.method} ${req.originalUrl}: ${errorMessage}`,
+		);
+		throw new UnauthorizedError(ERROR_MESSAGES.TOKEN_INVALID_OR_EXPIRED);
+	}
 };

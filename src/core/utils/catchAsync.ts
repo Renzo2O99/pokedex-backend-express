@@ -1,7 +1,7 @@
 // backend-express/src/core/utils/catchAsync.ts
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 
-type AsyncController = (req: Request, res: Response, next: NextFunction) => Promise<any>;
+type AsyncController = (req: Request, res: Response, next: NextFunction) => Promise<void>;
 
 /**
  * Envuelve una función de controlador asíncrona para capturar errores
@@ -10,7 +10,7 @@ type AsyncController = (req: Request, res: Response, next: NextFunction) => Prom
  * @returns Una función de middleware de Express.
  */
 export const catchAsync = (controller: AsyncController) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    controller(req, res, next).catch(next);
-  };
+	return (req: Request, res: Response, next: NextFunction) => {
+		controller(req, res, next).catch(next);
+	};
 };

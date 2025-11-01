@@ -46,45 +46,51 @@ export const AUTH_TOKEN_PREFIX: string = "Bearer ";
  * @property {string} HISTORY_FORBIDDEN - Mensaje cuando un usuario no tiene permiso para una acción en el historial.
  */
 export const ERROR_MESSAGES = {
-  // Errores específicos de Auth
-  USERNAME_IN_USE: "El nombre de usuario ya está en uso",
-  EMAIL_IN_USE: "El email ya está en uso",
-  INVALID_CREDENTIALS: "Credenciales inválidas",
-  USER_NOT_FOUND: "Usuario no encontrado",
-  PASSWORD_INCORRECT: "Contraseña incorrecta",
+	// Errores específicos de Auth
+	USERNAME_IN_USE: "El nombre de usuario ya está en uso",
+	EMAIL_IN_USE: "El email ya está en uso",
+	INVALID_CREDENTIALS: "Credenciales inválidas",
+	USER_NOT_FOUND: "Usuario no encontrado",
+	PASSWORD_INCORRECT: "Contraseña incorrecta",
+	PASSWORD_OLD_INCORRECT: "La contraseña actual es incorrecta.",
 
-  // Errores de Tokens (Middleware)
-  TOKEN_REQUIRED: "Acceso denegado. No se proveyó token.",
-  TOKEN_INVALID_FORMAT: "Formato de token inválido.",
-  TOKEN_INVALID_OR_EXPIRED: "Token inválido o expirado.",
+	// Errores de Tokens (Middleware)
+	TOKEN_REQUIRED: "Acceso denegado. No se proveyó token.",
+	TOKEN_INVALID_FORMAT: "Formato de token inválido.",
+	TOKEN_INVALID_OR_EXPIRED: "Token inválido o expirado.",
+	TOKEN_PAYLOAD_INVALID: "Formato de payload de token inválido.",
+	JWT_SECRET_NOT_DEFINED: "JWT_SECRET no está definido en las variables de entorno.",
 
-  // Errores de Validación (express-validator)
-  VALIDATION_USERNAME_REQUIRED: "El nombre de usuario es requerido.",
-  VALIDATION_USERNAME_MIN_LENGTH: "El nombre de usuario debe tener al menos 3 caracteres.",
-  VALIDATION_EMAIL_INVALID: "Debe ser un email válido.",
-  VALIDATION_PASSWORD_MIN_LENGTH: "La contraseña debe tener al menos 6 caracteres.",
-  VALIDATION_PASSWORD_REQUIRED: "La contraseña es requerida.",
+	// Errores de Validación (express-validator)
+	VALIDATION_USERNAME_REQUIRED: "El nombre de usuario es requerido.",
+	VALIDATION_USERNAME_MIN_LENGTH: "El nombre de usuario debe tener al menos 3 caracteres.",
+	VALIDATION_EMAIL_INVALID: "Debe ser un email válido.",
+	VALIDATION_PASSWORD_MIN_LENGTH: "La contraseña debe tener al menos 6 caracteres.",
+	VALIDATION_PASSWORD_REQUIRED: "La contraseña es requerida.",
+	VALIDATION_PASSWORD_OLD_REQUIRED: "La contraseña actual es requerida.",
+	VALIDATION_PASSWORD_NEW_REQUIRED: "La nueva contraseña es requerida.",
+	VALIDATION_PASSWORD_NEW_MIN_LENGTH: "La nueva contraseña debe tener al menos 6 caracteres.",
 
-  // Errores Genéricos (Clases de Error y Validación)
-  INVALID_INPUT: "Datos de entrada inválidos",
-  INTERNAL_SERVER_ERROR: "Error interno del servidor.",
-  RESOURCE_NOT_FOUND: "Recurso no encontrado.",
-  CONFLICT: "El recurso ya existe.",
-  BAD_REQUEST: "Petición inválida.",
-  UNAUTHORIZED: "No autorizado.",
-  TOO_MANY_REQUESTS: "Demasiadas peticiones desde esta IP, por favor intente de nuevo después de un minuto.",
-  VALIDATION_POKEMON_ID_REQUIRED: "El pokemonId es requerido y debe ser un número.",
-  FAVORITE_ALREADY_EXISTS: "Este Pokémon ya está en tus favoritos.",
-  FAVORITE_NOT_FOUND: "Este Pokémon no se encontró en tus favoritos.",
-  VALIDATION_SEARCH_TERM_REQUIRED: "El \"searchTerm\" es requerido y debe ser un string.",
-  HISTORY_ENTRY_NOT_FOUND: "Entrada de historial no encontrada.",
-  HISTORY_FORBIDDEN: "No tienes permiso para eliminar esta entrada.",
-  VALIDATION_LIST_NAME_REQUIRED: "El nombre de la lista es requerido.",
-  VALIDATION_LIST_ID_REQUIRED: "El listId es requerido y debe ser un número.",
-  LIST_NOT_FOUND: "Lista no encontrada.",
-  LIST_FORBIDDEN: "No tienes permiso para modificar o ver esta lista.",
-  POKEMON_ALREADY_IN_LIST: "El Pokémon ya existe en esta lista.",
-  POKEMON_NOT_IN_LIST: "El Pokémon no se encontró en esta lista.",
+	// Errores Genéricos (Clases de Error y Validación)
+	INVALID_INPUT: "Datos de entrada inválidos",
+	INTERNAL_SERVER_ERROR: "Error interno del servidor.",
+	RESOURCE_NOT_FOUND: "Recurso no encontrado.",
+	CONFLICT: "El recurso ya existe.",
+	BAD_REQUEST: "Petición inválida.",
+	UNAUTHORIZED: "No autorizado.",
+	TOO_MANY_REQUESTS: "Demasiadas peticiones desde esta IP, por favor intente de nuevo después de un minuto.",
+	VALIDATION_POKEMON_ID_REQUIRED: "El pokemonId es requerido y debe ser un número.",
+	FAVORITE_ALREADY_EXISTS: "Este Pokémon ya está en tus favoritos.",
+	FAVORITE_NOT_FOUND: "Este Pokémon no se encontró en tus favoritos.",
+	VALIDATION_SEARCH_TERM_REQUIRED: 'El "searchTerm" es requerido y debe ser un string.',
+	HISTORY_ENTRY_NOT_FOUND: "Entrada de historial no encontrada.",
+	HISTORY_FORBIDDEN: "No tienes permiso para eliminar esta entrada.",
+	VALIDATION_LIST_NAME_REQUIRED: "El nombre de la lista es requerido.",
+	VALIDATION_LIST_ID_REQUIRED: "El listId es requerido y debe ser un número.",
+	LIST_NOT_FOUND: "Lista no encontrada.",
+	LIST_FORBIDDEN: "No tienes permiso para modificar o ver esta lista.",
+	POKEMON_ALREADY_IN_LIST: "El Pokémon ya existe en esta lista.",
+	POKEMON_NOT_IN_LIST: "El Pokémon no se encontró en esta lista.",
 };
 
 /**
@@ -100,21 +106,23 @@ export const ERROR_MESSAGES = {
  * @property {string} HISTORY_ENTRY_REMOVED - Mensaje al eliminar un término de búsqueda.
  */
 export const SUCCESS_MESSAGES = {
-  REGISTER_SUCCESS: "Usuario registrado exitosamente",
-  LOGIN_SUCCESS: "Login exitoso",
-  FAVORITE_ADDED: "Pokémon añadido a favoritos.",
-  FAVORITE_REMOVED: "Pokémon eliminado de favoritos.",
-  FAVORITES_FETCHED: "Lista de Favoritos obtenida exitosamente.",
-  HISTORY_FETCHED: "Historial de búsqueda obtenido exitosamente.",
-  HISTORY_ENTRY_ADDED: "Término de búsqueda guardado.",
-  HISTORY_ENTRY_REMOVED: "Término de búsqueda eliminado.",
-  LIST_CREATED: "Lista creada exitosamente.",
-  LIST_UPDATED: "Lista actualizada exitosamente.",
-  LIST_DELETED: "Lista eliminada exitosamente.",
-  LISTS_FETCHED: "Listas obtenidas exitosamente.",
-  LIST_DETAILS_FETCHED: "Detalles de la lista obtenidos exitosamente.",
-  POKEMON_ADDED_TO_LIST: "Pokémon añadido a la lista.",
-  POKEMON_REMOVED_FROM_LIST: "Pokémon eliminado de la lista.",
+	REGISTER_SUCCESS: "Usuario registrado exitosamente",
+	LOGIN_SUCCESS: "Login exitoso",
+	PROFILE_FETCHED: "Perfil de usuario obtenido exitosamente.",
+	PASSWORD_CHANGED: "Contraseña actualizada exitosamente.",
+	FAVORITE_ADDED: "Pokémon añadido a favoritos.",
+	FAVORITE_REMOVED: "Pokémon eliminado de favoritos.",
+	FAVORITES_FETCHED: "Lista de Favoritos obtenida exitosamente.",
+	HISTORY_FETCHED: "Historial de búsqueda obtenido exitosamente.",
+	HISTORY_ENTRY_ADDED: "Término de búsqueda guardado.",
+	HISTORY_ENTRY_REMOVED: "Término de búsqueda eliminado.",
+	LIST_CREATED: "Lista creada exitosamente.",
+	LIST_UPDATED: "Lista actualizada exitosamente.",
+	LIST_DELETED: "Lista eliminada exitosamente.",
+	LISTS_FETCHED: "Listas obtenidas exitosamente.",
+	LIST_DETAILS_FETCHED: "Detalles de la lista obtenidos exitosamente.",
+	POKEMON_ADDED_TO_LIST: "Pokémon añadido a la lista.",
+	POKEMON_REMOVED_FROM_LIST: "Pokémon eliminado de la lista.",
 };
 
 /**
@@ -124,6 +132,6 @@ export const SUCCESS_MESSAGES = {
  * @property {string} PRODUCTION - Mensaje para el entorno de producción.
  */
 export const ENVIRONMENT_MESSAGES = {
-  DEVELOPMENT: "La aplicación está corriendo en entorno de desarrollo.",
-  PRODUCTION: "La aplicación está corriendo en entorno de producción.",
+	DEVELOPMENT: "La aplicación está corriendo en entorno de desarrollo.",
+	PRODUCTION: "La aplicación está corriendo en entorno de producción.",
 };

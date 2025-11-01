@@ -17,13 +17,13 @@ import { customListsPaths } from "../../swagger/custom-lists.swagger";
  * @property {object} paths - Objeto que contiene todas las definiciones de rutas de la API.
  */
 const swaggerDefinition = {
-  ...swaggerDefinitionBase,
-  paths: {
-    ...authPaths,
-    ...favoritesPaths,
-    ...historyPaths,
-    ...customListsPaths,
-  },
+	...swaggerDefinitionBase,
+	paths: {
+		...authPaths,
+		...favoritesPaths,
+		...historyPaths,
+		...customListsPaths,
+	},
 };
 
 /**
@@ -32,8 +32,8 @@ const swaggerDefinition = {
  * @property {string[]} apis - Rutas a los archivos que contienen anotaciones (no las usamos aquí).
  */
 const options: swaggerJSDoc.Options = {
-  swaggerDefinition,
-  apis: [],
+	swaggerDefinition,
+	apis: [],
 };
 
 /**

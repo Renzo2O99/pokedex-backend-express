@@ -18,22 +18,20 @@ const isDevelopment = process.env.NODE_ENV === "development";
 /**
  * @constant {string | undefined} connectionString - URL de conexión a la base de datos, dependiendo del entorno.
  */
-const connectionString = isDevelopment
-  ? process.env.DEVELOPMENT_DATABASE_URL
-  : process.env.DATABASE_URL;
+const connectionString = isDevelopment ? process.env.DEVELOPMENT_DATABASE_URL : process.env.DATABASE_URL;
 
 if (!connectionString) {
-  const varName = isDevelopment ? "DEVELOPMENT_DATABASE_URL" : "DATABASE_URL";
-  logger.fatal(new Error(`${varName} no está definida en .env`));
-  throw new Error(`${varName} is not defined`);
+	const varName = isDevelopment ? "DEVELOPMENT_DATABASE_URL" : "DATABASE_URL";
+	logger.fatal(new Error(`${varName} no está definida en .env`));
+	throw new Error(`${varName} is not defined`);
 }
 
 /**
  * @constant {postgres.SqlJs} client - Cliente de PostgreSQL para la conexión a la base de datos.
  */
-const client = postgres(connectionString, { "ssl": "require" });
+const client = postgres(connectionString, { ssl: "require" });
 
 /**
  * @constant {PostgresJsDatabase<typeof schema>} db - Instancia de Drizzle ORM conectada a la base de datos con el esquema definido.
  */
-export const db = drizzle(client, { "schema": schema });
+export const db = drizzle(client, { schema: schema });

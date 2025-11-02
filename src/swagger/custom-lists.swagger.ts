@@ -139,28 +139,90 @@ export const customListsPaths = {
 	"/lists/{listId}/pokemon/{pokemonId}": {
 		delete: {
 			summary: "Eliminar un Pokémon de una lista.",
+			description: "Elimina un Pokémon específico de una lista personalizada. Se requiere autenticación y que el usuario sea el propietario de la lista.",
 			tags: ["Listas Personalizadas"],
 			security: [{ bearerAuth: [] }],
 			parameters: [
 				{
 					name: "listId",
 					in: "path",
+					description: "ID de la lista personalizada",
 					required: true,
-					schema: { type: "integer" },
+					schema: { 
+						type: "integer",
+						example: 1,
+						minimum: 1
+					},
 				},
 				{
 					name: "pokemonId",
 					in: "path",
+					description: "ID del Pokémon a eliminar de la lista",
 					required: true,
-					schema: { type: "integer" },
+					schema: { 
+						type: "integer",
+						example: 25,
+						minimum: 1
+					},
 				},
 			],
 			responses: {
-				"200": { description: "Pokémon eliminado." },
-				"404": {
-					description: "No encontrado (Pokémon no estaba en la lista).",
+				"200": { 
+					description: "Pokémon eliminado exitosamente de la lista.",
+					content: {
+						"application/json": {
+							schema: {
+								type: "object",
+								properties: {
+									message: { 
+										type: "string",
+										example: "Pokémon eliminado de la lista exitosamente"
+									}
+								}
+							}
+						}
+					}
 				},
-				"401": { description: "No autorizado." },
+				"400": {
+					description: "Solicitud inválida - El ID de lista o Pokémon no es válido.",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/ErrorResponse"
+							}
+						}
+					}
+				},
+				"401": { 
+					description: "No autorizado - Token inválido o no proporcionado.",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/ErrorResponse"
+							}
+						}
+					}
+				},
+				"403": {
+					description: "Prohibido - El usuario no es propietario de la lista.",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/ErrorResponse"
+							}
+						}
+					}
+				},
+				"404": {
+					description: "No encontrado - La lista no existe o el Pokémon no está en la lista.",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/ErrorResponse"
+							}
+						}
+					}
+				}
 			},
 		},
 	},

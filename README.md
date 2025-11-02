@@ -20,16 +20,38 @@
 
 ## 🌟 Características Principales ✨
 
-### 🔐 Seguridad
+### 🔐 Seguridad Avanzada
 <div style="background: rgba(16, 185, 129, 0.1); padding: 1.5rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #10b981;">
+  <h4>🔒 Medidas de Seguridad Implementadas</h4>
   <ul style="margin: 0; padding-left: 1.2rem;">
-    <li>Autenticación con JWT seguro</li>
-    <li>Hash de contraseñas con bcrypt</li>
-    <li>Protección de cabeceras HTTP con Helmet</li>
-    <li>Rutas protegidas con middleware de autenticación</li>
-    <li>Protección contra ataques de fuerza bruta</li>
-    <li>Configuración segura de CORS</li>
-    <li>Manejo seguro de sesiones y tokens</li>
+    <li><strong>Autenticación JWT</strong> con expiración y refresh tokens</li>
+    <li><strong>Hash de contraseñas</strong> con bcrypt (10 rondas de sal)</li>
+    <li><strong>Protección de cabeceras HTTP</strong> con Helmet</li>
+    <li><strong>Configuración segura de CORS</strong> con origen restringido</li>
+    <li><strong>Rate limiting</strong> para prevenir ataques de fuerza bruta</li>
+    <li><strong>Sanitización de entradas</strong> para prevenir inyecciones</li>
+    <li><strong>Validación de datos</strong> con Zod en todas las entradas</li>
+    <li><strong>Manejo centralizado de errores</strong> sin exponer detalles sensibles</li>
+    <li><strong>Protección contra XSS</strong> con encabezados de seguridad</li>
+    <li><strong>Seguridad de cookies</strong> con flags HttpOnly, Secure y SameSite</li>
+  </ul>
+  
+  <h4>🔐 Configuración de Seguridad Detallada</h4>
+  <ul style="margin: 0; padding-left: 1.2rem;">
+    <li><code>helmet</code> con configuración personalizada para CSP, HSTS, XSS Filter, etc.</li>
+    <li>Límite de tamaño de solicitudes para prevenir ataques DoS</li>
+    <li>Deshabilitación del header <code>X-Powered-By</code></li>
+    <li>Configuración de seguridad para cookies de sesión</li>
+    <li>Protección contra MIME type sniffing</li>
+    <li>Políticas de seguridad de contenido (CSP) estrictas</li>
+    <li>Prevención de clickjacking con X-Frame-Options</li>
+  </ul>
+  
+  <h4>🔍 Monitoreo y Registro</h4>
+  <ul style="margin: 0; padding-left: 1.2rem;">
+    <li>Registro detallado de solicitudes en desarrollo</li>
+    <li>Registro de errores con información estructurada</li>
+    <li>Manejo de logs dinámico en base al entorno de ejecución (producción/desarrollo)</li>
   </ul>
 </div>
 
@@ -69,6 +91,44 @@
 - **Documentación**: Swagger UI / OpenAPI 3.0
 - **Seguridad**: Helmet, rate limiting, CORS
 - **Variables de Entorno**: dotenv
+
+## 🔐 Guía de Seguridad
+
+### Variables de Entorno Requeridas
+```env
+# Seguridad
+NODE_ENV=production
+SESSION_SECRET=tu_secreto_seguro_aqui
+JWT_SECRET=tu_jwt_secreto_aqui
+JWT_EXPIRES_IN=1d
+REFRESH_TOKEN_SECRET=tu_refresh_token_secreto
+REFRESH_TOKEN_EXPIRES_IN=7d
+
+# CORS (ajustar en producción)
+FRONTEND_URL=https://tudominio.com
+
+# Rate Limiting
+RATE_LIMIT_WINDOW_MS=900000  # 15 minutos
+RATE_LIMIT_MAX=100
+```
+
+### Recomendaciones de Despliegue Seguro
+
+1. **Configuración del Servidor**
+   - Usa siempre HTTPS en producción
+   - Mantén actualizado Node.js y todas las dependencias
+   - Configura políticas de seguridad de contenido (CSP)
+   - Usa un proxy inverso como Nginx o Apache
+
+2. **Base de Datos**
+   - Usa conexiones SSL para la base de datos
+   - Limita los permisos del usuario de la base de datos
+   - Realiza copias de seguridad periódicas
+
+3. **Monitoreo**
+   - Configura alertas para intentos de acceso sospechosos
+   - Monitorea el uso de recursos del servidor
+   - Revisa regularmente los logs de la aplicación
 
 ## 🚀 Comenzando
 

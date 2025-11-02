@@ -61,7 +61,9 @@ app.use(express.json());
 /**
  * @description Middleware para loguear todas las peticiones entrantes.
  */
-app.use(requestLogger);
+if (process.env.NODE_ENV !== "production") {
+  app.use(requestLogger);
+}
 
 /**
  * @section Rutas

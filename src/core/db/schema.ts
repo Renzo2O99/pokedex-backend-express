@@ -2,7 +2,7 @@
 
 /**
  * @fileoverview Define el esquema de la base de datos para la aplicación Pokédex usando Drizzle ORM.
- * Incluye tablas para usuarios, favoritos, historial de búsqueda, comentarios, valoraciones y listas personalizadas.
+ * Incluye tablas para usuarios, favoritos, historial de búsqueda y listas personalizadas.
  * También define las relaciones entre estas tablas.
  * @module core/db/schema
  */
@@ -75,51 +75,6 @@ export const searchHistory = pgTable(
 	(table) => ({
 		// Esto asegura que la combinación de un usuario y un término de búsqueda sea única.
 		searchIndex: uniqueIndex("search_idx").on(table.userId, table.searchTerm),
-	}),
-);
-
-//? --- Feature: Comentarios y Valoraciones ---
-/**
- * @table comments
- * @description Tabla para almacenar comentarios de los usuarios sobre Pokémon.
- * @property {number} id - ID único del comentario (serial, clave primaria).
- * @property {number} userId - ID del usuario que hizo el comentario (entero, clave foránea a `users.id`).
- * @property {number} pokemonId - ID del Pokémon comentado (entero, no nulo).
- * @property {string} content - Contenido del comentario (text, no nulo).
- * @property {Date} createdAt - Marca de tiempo de creación del comentario (timestamp, por defecto ahora, no nulo).
- */
-export const comments = pgTable("comments", {
-	id: serial("id").primaryKey(),
-	userId: integer("user_id")
-		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
-	pokemonId: integer("pokemon_id").notNull(),
-	content: text("content").notNull(),
-	createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-/**
- * @table ratings
- * @description Tabla para almacenar valoraciones de los usuarios sobre Pokémon.
- * @property {number} userId - ID del usuario que hizo la valoración (entero, clave foránea a `users.id`).
- * @property {number} pokemonId - ID del Pokémon valorado (entero, no nulo).
- * @property {number} value - Valor de la valoración (entero, no nulo, ej. 1 a 5).
- * @property {Date} createdAt - Marca de tiempo de creación de la valoración (timestamp, por defecto ahora, no nulo).
- * @constraint primaryKey - Un usuario solo puede calificar un Pokémon una vez.
- */
-export const ratings = pgTable(
-	"ratings",
-	{
-		id: serial("id").primaryKey(),
-		userId: integer("user_id")
-			.notNull()
-			.references(() => users.id, { onDelete: "cascade" }),
-		pokemonId: integer("pokemon_id").notNull(),
-		value: integer("value").notNull(), // (ej. 1 a 5)
-		createdAt: timestamp("created_at").defaultNow().notNull(),
-	},
-	(table) => ({
-		ratingIndex: uniqueIndex("rating_idx").on(table.userId, table.pokemonId),
 	}),
 );
 
